@@ -4,18 +4,31 @@ import java.util.Scanner;
 
 public class Minesweeper {
 
-    private static final int SIZE = 10;
-    private static final int MINES = 15;
+    private int SIZE;
+    private int MINES;
 
     private char[][] board;
     private char[][] mineField;
 
     public Minesweeper() {
+        getBoardSize();
         board = new char[SIZE][SIZE];
         mineField = new char[SIZE][SIZE];
         initializeBoard();
         placeMines();
         placeNumbers();
+    }
+
+    private void getBoardSize() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Mayın Tarlası büyüklüğünü girin: ");
+        SIZE = scanner.nextInt();
+        setMineAmount();
+    }
+
+    private void setMineAmount() {
+        MINES = SIZE / 4;
     }
 
     private void initializeBoard() {
@@ -65,7 +78,11 @@ public class Minesweeper {
     }
 
     private void printBoard() {
-        System.out.println("  0 1 2 3 4 5 6 7 8 9");
+        System.out.print("  ");
+        for (int k = 0; k < SIZE; k++) System.out.print(k + " " );
+
+        System.out.println();
+
         for (int i = 0; i < SIZE; i++) {
             System.out.print(i + " ");
             for (int j = 0; j < SIZE; j++) {
@@ -99,21 +116,22 @@ public class Minesweeper {
     public void play() {
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("Mayın Tarlası Oyuna Hoşgeldiniz !");
         while (true) {
             printBoard();
 
-            System.out.print("Enter row and column (e.g., 3 4): ");
+            System.out.print("Satır ve Sütün olarak giriş yapınız (örn., 3 4): ");
             int row = scanner.nextInt();
             int col = scanner.nextInt();
 
             if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
-                System.out.println("Invalid input. Please enter valid coordinates.");
+                System.out.println("Geçersiz Konum. Lütfen geçerli konum giriniz.");
                 continue;
             }
 
             if (uncoverCell(row, col)) {
                 printBoard();
-                System.out.println("Game over! You hit a mine.");
+                System.out.println("Oyun bitti! Mayına çarptınız.");
                 break;
             }
 
@@ -132,7 +150,7 @@ public class Minesweeper {
 
             if (allSafeCellsUncovered) {
                 printBoard();
-                System.out.println("Congratulations! You uncovered all safe cells.");
+                System.out.println("Tebrikler! Tüm mayınları buldunuz.");
                 break;
             }
         }
